@@ -4,7 +4,11 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
@@ -16,6 +20,7 @@ import junit.framework.Assert;
 public class zooWebAppSteps {
 
 	WebDriver driver;
+	WebElement element;	
 
 	@Given("^I am on the zoo site$")
 	public void shouldNavigateToZooSite() throws Throwable {
@@ -75,5 +80,35 @@ public class zooWebAppSteps {
 	@Then("^I check that the adoption has been set up$")
 	public void checkPageTitleForAdoption() throws Throwable {
 		Assert.assertTrue("Not on adoption set up page", driver.getTitle().equals("Adoption Result | Confirmed"));
+	}
+	
+	@Given("^I am on Google$")
+	public void shouldNavigateToGoogle() throws Throwable {
+		System.setProperty("webdriver.chrome.driver","E:/Java/chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.get("http://www.google.com");
+	}
+	
+	@When("^I perform a search$")
+	public void shouldPerformSearch() throws Throwable {
+	        // Find the text input element by its name
+	        element = driver.findElement(By.name("q"));
+	        // Enter something to search for
+	        element.sendKeys("BDD Gherkin");
+	        // Now submit the form. WebDriver will find the form for us from the element
+	        element.submit();
+	}
+
+	@Then("^I check that the search was made$")
+	public void checkPageTitleForSearchSubmission() throws Throwable {
+	    // Google's search is rendered dynamically with JavaScript.
+        // Wait for the page to load, timeout after 10 seconds
+        (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return d.getTitle().toLowerCase().startsWith("bdd gherkin");
+            }
+        });
+      //Close the browser
+        driver.quit();
 	}
 }

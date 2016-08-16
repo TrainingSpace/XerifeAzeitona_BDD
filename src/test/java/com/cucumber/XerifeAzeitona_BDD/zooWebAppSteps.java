@@ -84,7 +84,7 @@ public class zooWebAppSteps {
 	
 	@Given("^I am on Google$")
 	public void shouldNavigateToGoogle() throws Throwable {
-		System.setProperty("webdriver.chrome.driver","E:/Java/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.get("http://www.google.com");
 	}

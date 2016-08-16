@@ -3,10 +3,13 @@ package com.cucumber.XerifeAzeitona_BDD;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -84,8 +87,30 @@ public class zooWebAppSteps {
 	
 	@Given("^I am on Google$")
 	public void shouldNavigateToGoogle() throws Throwable {
+		/* Jenkins Security
+
+		 * Maven Integration Plugin with HTML Reports enabled: 
+		   System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "default-src 'none'; script-src 'self' img-src 'self'; style-src 'self'")
+
+		 * Set a custom value for the header:
+		   System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "sandbox; default-src 'self';")
+		   
+		 * Unset the header:
+		   System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "")
+		   
+		 * Set the header to the default:
+		   System.clearProperty("hudson.model.DirectoryBrowserSupport.CSP")
+		   
+		 * Find out the current header value:
+		   System.getProperty("hudson.model.DirectoryBrowserSupport.CSP")
+		*/
+		
 		System.setProperty("webdriver.chrome.driver","chromedriver.exe");
-		driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("no-sandbox");
+		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+		capabilities.setCapability(ChromeOptions.CAPABILITY, options);		
+		driver = new ChromeDriver(capabilities);
 		driver.get("http://www.google.com");
 	}
 	
